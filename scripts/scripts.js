@@ -29,13 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function getDecimalPlaces(value) {
-    if (value < 0.01) {
-      return 8;
+    if (value >= 10) {
+      return 2;
     }
-    if (value < 1) {
+    if (value >= 1) {
       return 4;
     }
-    return 2;
+    if (value >= 0.01) {
+      return 6;
+    }
+    return 8;
   }
 
   function getRates(baseCurrency) {
@@ -50,13 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
           const tr = document.createElement('tr');
           const currencyName = currencyNames[currency] || currency;
 
-          const fromBaseRate = rate;
-          const toBaseRate = (1 / rate).toFixed(getDecimalPlaces((1 / rate)));
+          const fromBaseRate = rate.toFixed(getDecimalPlaces(rate));
+          const reverseRate = (1 / rate);
+          const toBaseRate = reverseRate.toFixed(getDecimalPlaces(reverseRate));
 
           tr.innerHTML = `
             <td>${currency} - ${currencyName}</td>
-            <td>1 ${currency} = ${toBaseRate} ${baseCurrency}</td>
-            <td>1 ${baseCurrency} = ${fromBaseRate} ${currency}</td>
+            <td>1 ${currency} = ${toBaseRate * 1} ${baseCurrency}</td>
+            <td>1 ${baseCurrency} = ${fromBaseRate * 1} ${currency}</td>
           `;
           ratesTableBody.appendChild(tr);
         });
@@ -77,13 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!availableCurrencies.includes(fromCurrency)) {
         convertResult.textContent = '';
-        errorMessageConverter.textContent = `Currency code ${fromCurrency} does not exist`;
+        errorMessageConverter.textContent = `Currency code "${fromCurrency}" not found`;
         return;
       }
 
       if (!availableCurrencies.includes(toCurrency)) {
         convertResult.textContent = '';
-        errorMessageConverter.textContent = `Currency code ${toCurrency} does not exist`;
+        errorMessageConverter.textContent = `Currency code "${toCurrency}" not found`;
         return;
       }
 
@@ -93,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
           const rate = data.conversion_rates[toCurrency];
           if (rate) {
             const result = amount * rate;
-            convertResult.textContent = `${amount * 1} ${fromCurrency} = ${result.toFixed(2)} ${toCurrency}`;
+            const roundedResult = result.toFixed(getDecimalPlaces(result));
+            convertResult.textContent = `${amount * 1} ${fromCurrency} = ${roundedResult * 1} ${toCurrency}`;
             errorMessageConverter.textContent = '';
           } else {
             convertResult.textContent = '';
@@ -102,11 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
           console.error('Error converting currency:', error);
-          errorMessageConverter.textContent = 'Error converting currency';
+          errorMessageConverter.textContent = 'Exchange rates are currently unavailable.';
         });
     } else {
       convertResult.textContent = '';
-      errorMessageConverter.textContent = 'Invalid input format';
+      errorMessageConverter.textContent = 'Invalid input format. Use the format: <amount> <from_currency> in <to_currency>. Example: 15 USD in RUB';
     }
   }
 
