@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let currencyNames = {};
 
   function showPage(hash) {
-    pages.forEach(page => page.classList.remove('active'));
+    pages.forEach((page) => page.classList.remove('active'));
     document.querySelector(hash).classList.add('active');
   }
 
-  navLinks.forEach(link => {
+  navLinks.forEach((link) => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       showPage(e.target.getAttribute('href'));
@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getRates(baseCurrency) {
     fetch(`${apiUrl}${baseCurrency}`)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         ratesTableBody.innerHTML = '';
         // for (const [currency, rate] of Object.entries(data.conversion_rates)) {
         Object.entries(data.conversion_rates).forEach(([currency, rate]) => {
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         errorMessageRates.textContent = '';
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching rates:', error);
         errorMessageRates.textContent = 'Exchange rates are currently unavailable.';
       });
@@ -92,8 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       fetch(`${apiUrl}${fromCurrency}`)
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           const rate = data.conversion_rates[toCurrency];
           if (rate) {
             const result = amount * rate;
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             errorMessageConverter.textContent = `Cannot convert to ${toCurrency}`;
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('Error converting currency:', error);
           errorMessageConverter.textContent = 'Exchange rates are currently unavailable.';
         });
@@ -130,21 +130,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   fetch(`${currencyInfoUrl}`)
-    .then(response => response.json())
-    .then(data => {
-      availableCurrencies = data.supported_codes.map(code => code[0]);
+    .then((response) => response.json())
+    .then((data) => {
+      availableCurrencies = data.supported_codes.map((code) => code[0]);
       currencyNames = data.supported_codes.reduce((acc, [code, name]) => {
         acc[code] = name;
         return acc;
       }, {});
-      baseCurrencySelect.innerHTML = availableCurrencies.map(currency => {
+      baseCurrencySelect.innerHTML = availableCurrencies.map((currency) => {
         const currencyName = currencyNames[currency] || currency;
         return `<option value="${currency}">${currency} - ${currencyName}</option>`;
       }).join('');
       baseCurrencySelect.value = 'RUB';
       getRates('RUB');
     })
-    .catch(error => {
+    .catch((error) => {
       console.error('Error initializing rates:', error);
       errorMessageRates.textContent = 'Exchange rates are currently unavailable.';
     });
