@@ -69,9 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function convertCurrency(query) {
-    const match = query.match(/(\d+)\s+(\w+)\s+in\s+(\w+)/);
+    const match = query.trim().match(/^(\d+(?:[.,]\d+)?)\s+(\w+)\s+in\s+(\w+)$/);
     if (match) {
-      const amount = match[1];
+      const amount = match[1].replace(',', '.');
       const fromCurrency = match[2].toUpperCase();
       const toCurrency = match[3].toUpperCase();
 
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const rate = data.conversion_rates[toCurrency];
           if (rate) {
             const result = amount * rate;
-            convertResult.textContent = `${amount} ${fromCurrency} = ${result.toFixed(2)} ${toCurrency}`;
+            convertResult.textContent = `${amount * 1} ${fromCurrency} = ${result.toFixed(2)} ${toCurrency}`;
             errorMessageConverter.textContent = '';
           } else {
             convertResult.textContent = '';
