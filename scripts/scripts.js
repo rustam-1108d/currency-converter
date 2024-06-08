@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const convertInput = document.getElementById('convert-input');
   const convertButton = document.getElementById('convert-button');
   const convertResult = document.getElementById('convert-result');
+  const errorMessageConverter = document.getElementById('error-message-converter');
+  const errorMessageRates = document.getElementById('error-message-rates');
   const baseCurrencySelect = document.getElementById('base-currency');
   const ratesTableBody = document.querySelector('#rates-table tbody');
 
@@ -58,8 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
           `;
           ratesTableBody.appendChild(tr);
         });
+        errorMessageRates.textContent = '';
       })
-      .catch(error => console.error('Error fetching rates:', error));
+      .catch(error => {
+        console.error('Error fetching rates:', error);
+        errorMessageRates.textContent = 'Exchange rates are currently unavailable.';
+      });
   }
 
   function convertCurrency(query) {
@@ -70,12 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const toCurrency = match[3].toUpperCase();
 
       if (!availableCurrencies.includes(fromCurrency)) {
-        convertResult.textContent = `Currency code ${fromCurrency} does not exist`;
+        convertResult.textContent = '';
+        errorMessageConverter.textContent = `Currency code ${fromCurrency} does not exist`;
         return;
       }
 
       if (!availableCurrencies.includes(toCurrency)) {
-        convertResult.textContent = `Currency code ${toCurrency} does not exist`;
+        convertResult.textContent = '';
+        errorMessageConverter.textContent = `Currency code ${toCurrency} does not exist`;
         return;
       }
 
@@ -86,13 +94,19 @@ document.addEventListener('DOMContentLoaded', () => {
           if (rate) {
             const result = amount * rate;
             convertResult.textContent = `${amount} ${fromCurrency} = ${result.toFixed(2)} ${toCurrency}`;
+            errorMessageConverter.textContent = '';
           } else {
-            convertResult.textContent = `Cannot convert to ${toCurrency}`;
+            convertResult.textContent = '';
+            errorMessageConverter.textContent = `Cannot convert to ${toCurrency}`;
           }
         })
-        .catch(error => console.error('Error converting currency:', error));
+        .catch(error => {
+          console.error('Error converting currency:', error);
+          errorMessageConverter.textContent = 'Error converting currency';
+        });
     } else {
-      convertResult.textContent = 'Invalid input format';
+      convertResult.textContent = '';
+      errorMessageConverter.textContent = 'Invalid input format';
     }
   }
 
@@ -125,7 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
       baseCurrencySelect.value = 'RUB';
       getRates('RUB');
     })
-    .catch(error => console.error('Error initializing rates:', error));
+    .catch(error => {
+      console.error('Error initializing rates:', error);
+      errorMessageRates.textContent = 'Exchange rates are currently unavailable.';
+    });
 
   // Show the converter page by default
   showPage('#converter');
