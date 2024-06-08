@@ -1,1 +1,49 @@
-<h1>Hello!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currency Converter</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="#converter">Converter</a></li>
+      <li><a href="#rates">Rates</a></li>
+    </ul>
+  </nav>
+
+  <div id="app">
+    <div id="converter" class="page">
+      <h1>Currency Converter</h1>
+      <label for="convert-input">Enter Your Conversion Request</label>
+      <input type="text" id="convert-input" placeholder="Example: 15 USD in RUB">
+      <button id="convert-button">Convert</button>
+      <p id="convert-result"></p>
+    </div>
+    
+    <div id="rates" class="page">
+      <h1>Current Rates</h1>
+      <label for="base-currency">Select base currency</label>
+      <select id="base-currency">
+        <!-- Options by JavaScript -->
+      </select>
+      <table id="rates-table">
+        <thead>
+          <tr>
+            <th>Currency Name</th>
+            <th>To Base Currency</th>
+            <th>From Base Currency</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows by JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="scripts/scripts.js"></script>
+</body>
+</html>
