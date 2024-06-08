@@ -65,6 +65,13 @@ label[for="base-currency"] {
   font-weight: bold;
 }
 
+#error-message-converter,
+#error-message-rates {
+  color: red; /* Цвет для сообщения об ошибке */
+  font-weight: bold;
+  margin-top: 1em;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
