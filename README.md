@@ -1,11 +1,10 @@
 # Одностраничное приложение для конвертирования валют
-Статус: готово
+
+Приложение доступно по адресу: https://rustam-1108d.github.io/test-task-currency-converter/
+
 
 ## Задание
 https://github.com/appbooster/test-assignments/blob/master/tasks/frontend.md
-
-## Результат
-https://rustam-1108d.github.io/test-task-currency-converter/
 
 - [x] Написать SPA для конвертирования валют
 - [x] Для получения текущих курсов найти и использовать любое отрытое API.
